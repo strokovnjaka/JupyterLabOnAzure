@@ -1,0 +1,46 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Install pip
+      apt:
+        name: python3-pip
+        update_cache: yes
+    - name: Install jupyterlab
+      pip:
+        name: jupyterlab
+        executable: pip3
+        state: latest
+    - name: Install pandas
+      pip:
+        name: pandas
+        executable: pip3
+        state: latest
+    - name: Create .jupyter dir
+      file:
+        path: /home/adminuser/.jupyter
+        state: directory
+        owner: adminuser
+        group: adminuser
+    - name: Install jupyterlab config
+      copy:
+        src: /vps/output/jupyter_server_config.py
+        dest: /home/adminuser/.jupyter/jupyter_server_config.py
+    - name: Install jupyterlab service
+      copy:
+        src: /vps/output/jupyterlab.service
+        dest: /etc/systemd/system/jupyterlab.service
+    - name: Start jupyterlab service, if not started
+      service:
+        name: jupyterlab
+        state: started
+    - name: Get file where token is written
+      find:
+        paths: /home/adminuser/.local/share/jupyter/runtime
+        patterns: "jpserver-*.json"
+      register: runtime_file
+    - name: Find out what the remote machine's mounts are
+      slurp:
+        src: "{{runtime_file.files[0].path}}"
+      register: runtime
+    - name: Save to file for output variable
+      local_action: copy content="{{ (runtime['content'] | b64decode | from_json).token }}" dest=/vps/output/jupyter_server_token

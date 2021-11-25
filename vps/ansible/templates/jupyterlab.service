@@ -1,0 +1,16 @@
+[Unit]
+Description=Jupyter Lab Server
+
+[Service]
+User=adminuser
+Group=adminuser
+Type=simple
+WorkingDirectory=/home/adminuser/
+ExecStart=/usr/local/bin/jupyter-lab
+StandardOutput=syslog
+StandardError=syslog
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
