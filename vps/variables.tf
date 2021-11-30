@@ -18,6 +18,21 @@ variable "port" {
   description = "Port for the jupyter lab server"
 }
 
+variable "gitrepo" {
+  default = "foosball.example.org/path/to/repo.git"
+  description = "Git Repo address, https accessible"
+}
+
+variable "gituser" {
+  default = "foosball"
+  description = "Git user"
+}
+
+variable "gitpass" {
+  default = "foosball"
+  description = "Git access token (or, not recommended, password)"
+}
+
 locals {
   workdir = "${path.cwd}"
 }

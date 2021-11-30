@@ -175,7 +175,7 @@ resource "null_resource" "go_jupylab" {
     local_file.jupyterlab_service_rendered,
   ]
   provisioner "local-exec" {
-    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook --inventory=${local.workdir}/output/ansible-hosts ${local.workdir}/ansible/main.yaml -e 'ansible_python_interpreter=/usr/bin/python3'"
+    command = "ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook --inventory=${local.workdir}/output/ansible-hosts ${local.workdir}/ansible/main.yaml -e 'ansible_python_interpreter=/usr/bin/python3' --extra-vars='{\"gitrepo\": ${var.gitrepo}, \"gituser\": ${var.gituser}, \"gitpass\": ${var.gitpass} }'"
     working_dir = "${local.workdir}"
   }
 }

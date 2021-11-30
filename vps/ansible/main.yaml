@@ -7,7 +7,9 @@
         update_cache: yes
     - name: Install jupyterlab
       pip:
-        name: jupyterlab
+        name: 
+          - jupyterlab
+          - jupyterlab-git
         executable: pip3
         state: latest
     - name: Install pandas
@@ -19,8 +21,25 @@
       file:
         path: /home/adminuser/.jupyter
         state: directory
+        recurse: yes
         owner: adminuser
         group: adminuser
+    - name: Install git
+      apt:
+        name: git
+        state: present
+        update_cache: yes
+    - name: Download the code from the GitRepo
+      git:
+        repo: 'https://{{gituser}}:{{gitpass}}@{{gitrepo}}'
+        dest: "/home/adminuser/workdir"
+    - name: Change the ownership of the directory
+      file:
+        path: "/home/adminuser/workdir"
+        state: directory
+        owner: "adminuser"
+        group: "adminuser"
+        recurse: yes
     - name: Install jupyterlab config
       copy:
         src: /vps/output/jupyter_server_config.py

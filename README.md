@@ -1,6 +1,6 @@
 # Use case JupyterLabOnAzure: a server with jupyter lab on Azure with terraform
 
-Use case for putting jupyter lab server on Azure with terraform/ansible.
+Use case for putting jupyter lab server with git repo support on Azure with terraform/ansible.
 
 ## Build the image
 
@@ -36,7 +36,13 @@ docker exec -it uc1jupylab /bin/bash
 
 ### Run terraform in container
 
-To change port and/or add allowed IPs, define `port`, and/or `clients` variables, respectively. Either pass them or create `terraform.tfvars` from the `vps/terraform.tfvars.tmpl` template.
+Variables that can be passed e.g. via `terraform.tfvars` (see the `vps/terraform.tfvars.tmpl` template):
+
+- `port` instance's port
+- `clients` list of allowed IPs
+- `gitrepo` git repo address, https accessible
+- `gituser` git repo username
+- `gitpass` git repo access token (password not recommended)
 
 Then initialize terraform and apply the plan:
 
